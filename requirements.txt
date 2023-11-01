@@ -1,0 +1,1 @@
+pip install fastapi sqlalchemy databases passlib[bcrypt] python-jose asyncpg uvicorn
