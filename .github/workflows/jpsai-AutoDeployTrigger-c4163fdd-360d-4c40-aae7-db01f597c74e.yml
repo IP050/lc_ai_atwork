@@ -1,0 +1,42 @@
+name: Trigger auto deployment for jpsai
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/jpsai-AutoDeployTrigger-c4163fdd-360d-4c40-aae7-db01f597c74e.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.JPSAI_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: jpswebapp.azurecr.io
+          registryUsername: ${{ secrets.JPSAI_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.JPSAI_REGISTRY_PASSWORD }}
+          containerAppName: jpsai
+          resourceGroup: DefaultResourceGroup-NEU
+          imageToBuild: jpswebapp.azurecr.io/jpsai:${{ github.sha }}
+          
+
+     
+
