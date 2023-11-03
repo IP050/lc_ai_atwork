@@ -35,3 +35,7 @@ async def login(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # Create token (this requires additional implementation)
     token = crud.create_access_token(data={"sub": user.username})
     return {"access_token": token, "token_type": "bearer"}
+
+@app.get("/")
+async def home():
+    return "hello world"
