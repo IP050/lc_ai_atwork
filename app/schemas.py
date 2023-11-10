@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 import datetime
+from typing import List, Dict
 
 # This schema will be used for user creation requests
 class UserCreate(BaseModel):
@@ -36,3 +37,22 @@ class Token(BaseModel):
 # Optionally, a schema for token data could also be defined
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+
+# AI doc scheme
+
+class DocRequest(BaseModel):
+    filename: str 
+    chat_history: List[str]
+    question: str 
+
+class DocRequest(BaseModel):
+    filename: str 
+    chat_history: List[str]
+    question: str 
+
+# chatreq 
+class ChatRequest(BaseModel):
+    query: str 
+    language: str
+    persona: str

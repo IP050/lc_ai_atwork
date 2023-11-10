@@ -43,3 +43,13 @@ def create_access_token(data: dict):
     data.update({"exp": expire})
     encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Verify a password against the hashed version.
+
+    :param plain_password: The password provided by the user to verify.
+    :param hashed_password: The hashed password stored in the database.
+    :return: True if the password is correct, False otherwise.
+    """
+    return pwd_context.verify(plain_password, hashed_password)
