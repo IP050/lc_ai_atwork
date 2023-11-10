@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 import os 
 
 
-token = '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'
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
 class Qa(BaseModel):
     question: str = Field(info="the question translated to dutch")
@@ -15,7 +15,7 @@ class Qa(BaseModel):
 
 
 def run_chain(query):
-    llm = OpenAI(temperature=0, openai_api_key=token)
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
     
     parser = PydanticOutputParser(pydantic_object=Qa)
     prompt = PromptTemplate(
