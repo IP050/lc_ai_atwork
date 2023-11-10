@@ -12,6 +12,7 @@ from .crud import SECRET_KEY, ALGORITHM
 from .ai.docs import run_conversational_retrieval_chain, format_filename, load_and_process_document, load_azure_blob_container, load_and_process_pdf
 from .ai.custom import run_chain
 from azure.storage.blob import BlobServiceClient
+from fastapi.responses import RedirectResponse
 
 import traceback
 import nltk
@@ -163,6 +164,11 @@ async def runner(request: schemas.ChatRequest):
     return run_chain({'query' : request.query, 'language' : request.language, 'persona' : request.persona})
 
 
+@app.get("/login_succes")
+async def back_to_chat():
+    return RedirectResponse(
+        url="https://gray-tree-0f5500b03.3.azurestaticapps.net")
+    
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
