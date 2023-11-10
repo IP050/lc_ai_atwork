@@ -9,8 +9,9 @@ from langchain.document_loaders import TextLoader, AzureBlobStorageFileLoader
 import re
 from langchain.document_loaders import PyPDFLoader
 # PyPDFDirectoryLoader
+import os 
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 # Load and split the PDF document.
 
 

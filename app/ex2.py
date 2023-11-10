@@ -8,7 +8,8 @@ from langchain.prompts import (
     SystemMessagePromptTemplate,
 )
 
-OPENAI_API_KEY = "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"
+import os 
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 prompt = ChatPromptTemplate.from_messages(
     [
         SystemMessagePromptTemplate.from_template(
