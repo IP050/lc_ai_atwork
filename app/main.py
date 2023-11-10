@@ -164,12 +164,7 @@ async def runner(request: schemas.ChatRequest):
     return run_chain({'query' : request.query, 'language' : request.language, 'persona' : request.persona})
 
 
-@app.get("/login_succes")
-async def back_to_chat():
-    return RedirectResponse(
-        url="https://gray-tree-0f5500b03.3.azurestaticapps.net")
     
 @app.get("/")
 async def root():
-    return RedirectResponse(
-        url="https://gray-tree-0f5500b03.3.azurestaticapps.net")
+    return "root"
