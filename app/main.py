@@ -123,7 +123,7 @@ async def upload_file(file: UploadFile = File(...)):
     return {"filename": file_name}
 
 
-@app.post("/uploadv2")
+@app.post("/api/uploadv2")
 async def upload_file(file: UploadFile = File(...)):
     filename = format_filename(file.filename)
     file_path = os.path.join(upload_directory, filename)
@@ -132,7 +132,7 @@ async def upload_file(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     return {"filename": filename}
 
-@app.post("/docgpttwo")
+@app.post("/api/docgpttwo")
 async def docgpt(request: schemas.DocRequest):
     # Check if the file exists
     file_path = f"uploads/{request.filename}"
@@ -159,7 +159,7 @@ async def docgpt(request: schemas.DocRequest):
     
     return {"answer": answer}
 
-@app.post("/runchain")
+@app.post("/api/runchain")
 async def runner(request: schemas.ChatRequest):
     return run_chain({'query' : request.query, 'language' : request.language, 'persona' : request.persona})
 
