@@ -148,7 +148,7 @@ async def docgpt(request: schemas.DocRequest):
 
 @app.post("/docgpt")
 async def docgpt(request: schemas.DocRequest):
-    # Use the loader to load documents from the container
+    # Use the loaer to load documents from the container
     docsearch = load_azure_blob_container(
                 azure_con_str=os.environ.get('AZURE_CONN_STR'),
                 containername = os.environ.get('AZURE_CONTAINER_NAME'),
