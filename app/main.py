@@ -134,7 +134,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/api/docgpttwo")
 async def docgpt(request: schemas.DocRequest):
-    # Check if the file exists
+    # Check if the file existsbl
     file_path = f"uploads/{request.filename}"
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
