@@ -13,6 +13,8 @@ from .ai.docs import run_conversational_retrieval_chain, format_filename, load_a
 from .ai.custom import run_chain
 from azure.storage.blob import BlobServiceClient
 from fastapi.responses import RedirectResponse
+import logging
+
 
 import traceback
 import nltk
@@ -148,8 +150,12 @@ async def docgpt(request: schemas.DocRequest):
 
 @app.post("api/docgpt3")
 async def docgpt(request: schemas.DocRequest):
-    file_path = f"uploads/{request.filename}"
+    file_path = f"app/uploads/{request.filename}"
+    cwd = os.getcwd()
+    logging.info(f"Resolved file path: {file_path}")
+    logging.info(f"Current working directory: {cwd}")
     if not os.path.exists(file_path):
+        logging.error("File not found at the path")
         raise HTTPException(status_code=404, detail="File not found")
     if "pdf" in request.filename:
         docsearch = load_dir("app/uploads")
