@@ -10,6 +10,8 @@ import re
 from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 # PyPDFDirectoryLoader
 import os 
+import logging 
+
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 # Load and split the PDF document.
@@ -19,8 +21,10 @@ def format_filename(filename: str) -> str:
     return re.sub(r'\s+', '_', filename)
 
 def load_dir(path):
+    logging.info(f"Loading documents from directory: {path}")
     loader = DirectoryLoader(path, glob="**/*.pdf", loader_cls=PyPDFLoader)
     docs = loader.load()
+    logging.info(f"Number of documents loaded: {len(docs)}")
     return docs
 
 def load_and_process_pdf(file_path: str) -> Chroma:

@@ -148,9 +148,9 @@ async def docgpt(request: schemas.DocRequest):
     answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
     return {"answer": answer}
 
-@app.post("api/docgpt3")
+@app.post("/api/docgpt3")
 async def docgpt(request: schemas.DocRequest):
-    file_path = f"app/uploads/{request.filename}"
+    file_path = f"uploads/{request.filename}"
     cwd = os.getcwd()
     logging.info(f"Resolved file path: {file_path}")
     logging.info(f"Current working directory: {cwd}")
