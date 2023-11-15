@@ -154,8 +154,8 @@ async def docgpt(request: schemas.DocRequest):
     cwd = os.getcwd()
     print({file_path})
     print(f"cwd {cwd}")
-    logging.info(f"Resolved file path: {file_path}")
-    logging.info(f"Current working directory: {cwd}")
+    logging.log(f"Resolved file path: {file_path}")
+    logging.log(f"Current working directory: {cwd}")
     if not os.path.exists(file_path):
         logging.error("File not found at the path")
         raise HTTPException(status_code=404, detail="File not found")
