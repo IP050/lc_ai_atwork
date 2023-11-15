@@ -152,15 +152,17 @@ async def docgpt(request: schemas.DocRequest):
 async def docgpt(request: schemas.DocRequest):
     file_path = f"uploads/{request.filename}"
     cwd = os.getcwd()
+    print({file_path})
+    print(f"cwd {cwd}")
     logging.info(f"Resolved file path: {file_path}")
     logging.info(f"Current working directory: {cwd}")
     if not os.path.exists(file_path):
         logging.error("File not found at the path")
         raise HTTPException(status_code=404, detail="File not found")
     if "pdf" in request.filename:
-        docsearch = load_dir("app/uploads")
+        docsearch = load_dir("./uploads")
     else:
-        docsearch = load_dir("app/uploads")
+        docsearch = load_dir("./uploads")
     
     answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
     return {"answer": answer}
