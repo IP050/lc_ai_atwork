@@ -9,7 +9,7 @@ from jose import jwt
 import shutil 
 import os 
 from .crud import SECRET_KEY, ALGORITHM
-from .ai.docs import run_conversational_retrieval_chain, format_filename, load_and_process_document, load_azure_blob_container, load_and_process_pdf
+from .ai.docs import run_conversational_retrieval_chain, format_filename, load_and_process_document, load_azure_blob_container, load_and_process_pdf, load_dir
 from .ai.custom import run_chain
 from azure.storage.blob import BlobServiceClient
 from fastapi.responses import RedirectResponse
@@ -145,6 +145,20 @@ async def docgpt(request: schemas.DocRequest):
     
     answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
     return {"answer": answer}
+
+@app.post("api/docgpt3")
+async def docgpt(request: schemas.DocRequest):
+    file_path = f"uploads/{request.filename}"
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    if "pdf" in request.filename:
+        docsearch = load_dir("app/uploads")
+    else:
+        docsearch = load_dir("app/uploads")
+    
+    answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
+    return {"answer": answer}
+
 
 @app.post("/docgpt")
 async def docgpt(request: schemas.DocRequest):

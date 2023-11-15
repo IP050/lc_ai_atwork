@@ -7,7 +7,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import TextLoader, AzureBlobStorageFileLoader
 import re
-from langchain.document_loaders import PyPDFLoader
+from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 # PyPDFDirectoryLoader
 import os 
 
@@ -17,6 +17,11 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
 def format_filename(filename: str) -> str:
     return re.sub(r'\s+', '_', filename)
+
+def load_dir(path):
+    loader = DirectoryLoader(path, glob="**/*.pdf", loader_cls=PyPDFLoader)
+    docs = loader.load()
+    return docs
 
 def load_and_process_pdf(file_path: str) -> Chroma:
     loader = PyPDFLoader(file_path, extract_images=False)
