@@ -45,6 +45,11 @@ class DocRequest(BaseModel):
     filename: str 
     chat_history: List[str]
     question: str 
+    
+class DocRequestTwo(BaseModel):
+    filename: List[str]
+    chat_history: List[str]
+    question: str 
 
 class DocRequest(BaseModel):
     filename: str 

@@ -13,6 +13,7 @@ from .ai.docs import run_conversational_retrieval_chain, format_filename, load_a
 from .ai.custom import run_chain
 from azure.storage.blob import BlobServiceClient
 from fastapi.responses import RedirectResponse
+from typing import List
 import logging
 
 
@@ -148,14 +149,47 @@ async def docgpt(request: schemas.DocRequest):
     answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
     return {"answer": answer}
 
+@app.post("/api/uploadfiles")
+async def upload_files(files: List[UploadFile] = File(...)):
+    filenames = []
+    for file in files:
+        filename = format_filename(file.filename)
+        file_path = os.path.join(upload_directory, filename)
+
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        filenames.append(filename)
+    
+    return {"filenames": filenames}
+
 @app.post("/api/docgpt3")
 async def docgpt(request: schemas.DocRequest):
     file_path = f"uploads/{request.filename}"
     cwd = os.getcwd()
     print({file_path})
     print(f"cwd {cwd}")
-    logging.log(f"Resolved file path: {file_path}")
-    logging.log(f"Current working directory: {cwd}")
+    logging.log(msg=f"Resolved file path: {file_path}")
+    logging.log(msg=f"Current working directory: {cwd}")
+    if not os.path.exists(file_path):
+        logging.error("File not found at the path")
+        raise HTTPException(status_code=404, detail="File not found")
+    if "pdf" in request.filename:
+        docsearch = load_dir("./uploads")
+    else:
+        docsearch = load_dir("./uploads")
+    
+    answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
+    return {"answer": answer}
+
+@app.post("/api/docgpt4")
+async def docgpt(request: schemas.DocRequestTwo):
+    file_path = f"uploads/{request.filename[0]}"
+    cwd = os.getcwd()
+    print({file_path})
+    print(f"cwd {cwd}")
+    logging.log(msg=f"Resolved file path: {file_path}")
+    logging.log(msg=f"Current working directory: {cwd}")
     if not os.path.exists(file_path):
         logging.error("File not found at the path")
         raise HTTPException(status_code=404, detail="File not found")
