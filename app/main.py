@@ -21,7 +21,7 @@ import traceback
 import nltk
 nltk.download('punkt')
 original_nltk_download = nltk.download
-
+docsearch_cache = {}
 upload_directory = "/app/uploads"
 # Ensure the upload_directory exists
 os.makedirs(upload_directory, exist_ok=True)
@@ -135,6 +135,8 @@ async def upload_file(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     return {"filename": filename}
 
+
+
 @app.post("/api/docgpttwo")
 async def docgpt(request: schemas.DocRequest):
     # Check if the file existsbl
@@ -145,6 +147,24 @@ async def docgpt(request: schemas.DocRequest):
         docsearch = load_and_process_pdf(file_path)
     else:
         docsearch = load_and_process_document(file_path)
+    
+    answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
+    return {"answer": answer}
+
+@app.post("/api/docgptcachce")
+async def docgpt(request: schemas.DocRequest):
+    file_path = f"uploads/{request.filename}"
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    if request.filename not in docsearch_cache:
+        if "pdf" in request.filename:
+            docsearch = load_and_process_pdf(file_path)
+        else:
+            docsearch = load_and_process_document(file_path)
+        docsearch_cache[request.filename] = docsearch
+    else:
+        docsearch = docsearch_cache[request.filename]
     
     answer = run_conversational_retrieval_chain(docsearch, request.question, request.chat_history)
     return {"answer": answer}
