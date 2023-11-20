@@ -46,7 +46,7 @@ def load_azure_blob_container(azure_con_str, containername, filename):
 def load_and_process_document(file_path: str) -> Chroma:
     loader = TextLoader(file_path)
     documents = loader.load()
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0, encoding="utf8")
     texts = text_splitter.split_documents(documents)
     embeddings = FakeEmbeddings(size=1536)
     return Chroma.from_documents(texts, embeddings)
