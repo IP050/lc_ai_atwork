@@ -69,7 +69,7 @@ def get_db():
     finally:
         db.close() """
 
-@app.post("/register", response_model=schemas.User)
+""" @app.post("/register", response_model=schemas.User)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # Check if user with same username or email already exists
     db_user = crud.get_user_by_email(db, email=user.email) or crud.get_user_by_username(db, username=user.username)
@@ -77,9 +77,9 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email or username already registered")
     
     # Create new user
-    return crud.create_user(db=db, user=user)
+    return crud.create_user(db=db, user=user) """
 
-@app.post("/login")
+""" @app.post("/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = crud.get_user_by_username(db, username=form_data.username)
     if not user or not crud.verify_password(form_data.password, user.hashed_password):
@@ -88,9 +88,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     access_token = crud.create_access_token(data={"sub": user.username})
     response = Response()
     response.set_cookie(key="jwt", value=f"Bearer {access_token}", httponly=True)
-    return response
+    return response """
 
-@app.get("/check")
+""" @app.get("/check")
 async def check_logged_in(token: str = Security(oauth2_scheme), db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -102,12 +102,12 @@ async def check_logged_in(token: str = Security(oauth2_scheme), db: Session = De
             raise HTTPException(status_code=401, detail="User not found")
         return {"username": user.username, "email": user.email}
     except jwt.JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token or expired token")
+        raise HTTPException(status_code=401, detail="Invalid token or expired token") """
 
-@app.post("/logout")
+""" @app.post("/logout")
 async def logout(response: Response):
     response.delete_cookie(key="jwt")
-    return {"detail": "Logged out"}
+    return {"detail": "Logged out"} """
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
